@@ -1,0 +1,59 @@
+version: "3.8"
+
+services:
+  web:
+    build: .
+    command: ./entrypoints/web.sh
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy # Garante que o DB esteja saudável
+      redis:
+        condition: service_started # Redis geralmente não precisa de healthcheck complexo para iniciar
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: postgres://postgres:postgres@db:5432/myapp3
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY_BASE: 45d8ebb705ff6235ae08afac02417fb2f1bcb090726b64ce36809fa6403fc865be9738437f8dc6eabfa3ec6dda9983f75af462e2fe2d647da8bc8dacee65f3fa
+    volumes:
+      - .:/app
+
+  sidekiq:
+    build: .
+    command: ./entrypoints/sidekiq.sh
+    depends_on:
+      db:
+        condition: service_healthy # Garante que o DB esteja saudável
+      redis:
+        condition: service_started
+    environment:
+      RAILS_ENV: production
+      DATABASE_URL: postgres://postgres:postgres@db:5432/myapp3
+      REDIS_URL: redis://redis:6379/0
+      SECRET_KEY_BASE: 45d8ebb705ff6235ae08afac02417fb2f1bcb090726b64ce36809fa6403fc865be9738437f8dc6eabfa3ec6dda9983f75af462e2fe2d647da8bc8dacee65f3fa
+    volumes:
+      - .:/app
+
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: myapp3
+    ports:
+      - "5436:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck: # Adiciona o healthcheck para o serviço de banco de dados
+      test: ["CMD-SHELL", "pg_isready -U postgres -d myapp3"] # Testa a conexão com o banco 'myapp3'
+      interval: 5s # Verifica a cada 5 segundos
+      timeout: 5s # Tempo limite para a verificação
+      retries: 5 # Número de tentativas antes de considerar o serviço não saudável
+      start_period: 10s # Tempo para o contêiner iniciar antes de começar os healthchecks
+
+  redis:
+    image: redis:7
+
+volumes:
+  pg_data:

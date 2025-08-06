@@ -33,6 +33,8 @@ class SuperAdmin::AppConfigsController < SuperAdmin::ApplicationController
 
   def allowed_configs
     mapping = {
+      'general' => %w[ENABLE_ACCOUNT_SIGNUP FIREBASE_PROJECT_ID FIREBASE_CREDENTIALS],
+      'custom_branding' => %w[ENABLE_CUSTOM_BRANDING CUSTOM_BRANDING_LOGO CUSTOM_BRANDING_FAVICON CUSTOM_BRANDING_COLOR],
       'facebook' => %w[FB_APP_ID FB_VERIFY_TOKEN FB_APP_SECRET IG_VERIFY_TOKEN FACEBOOK_API_VERSION ENABLE_MESSENGER_CHANNEL_HUMAN_AGENT],
       'shopify' => %w[SHOPIFY_CLIENT_ID SHOPIFY_CLIENT_SECRET],
       'microsoft' => %w[AZURE_APP_ID AZURE_APP_SECRET],

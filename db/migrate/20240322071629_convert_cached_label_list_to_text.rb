@@ -1,20 +1,22 @@
 class ConvertCachedLabelListToText < ActiveRecord::Migration[7.0]
   def up
-    change_column :conversations, :cached_label_list, :text
+    # change_column :conversations, :cached_label_list, :text
+    return
   end
 
   def down
     # This might cause data loss if the text is longer than 255 characters
     # lets start by truncating the data to 255 characters
-    Conversation.where('LENGTH(cached_label_list) > 255').find_in_batches do |conversation_batch|
-      Conversation.transaction do
-        conversation_batch.each do |conversation|
-          conversation.update!(cached_label_list: truncate_list(conversation.cached_label_list))
-        end
-      end
-    end
+    # Conversation.where('LENGTH(cached_label_list) > 255').find_in_batches do |conversation_batch|
+    #   Conversation.transaction do
+    #     conversation_batch.each do |conversation|
+    #       conversation.update!(cached_label_list: truncate_list(conversation.cached_label_list))
+    #     end
+    #   end
+    # end
 
-    change_column :conversations, :cached_label_list, :string
+    # change_column :conversations, :cached_label_list, :string
+    return
   end
 
   private
