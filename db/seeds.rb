@@ -113,7 +113,7 @@ unless Rails.env.development?
     name: 'Acme Org'
   )
 
-  user = User.new(name: 'John', email: 'john@acme.inc', password: 'Password123!', type: 'SuperAdmin')
+  user = User.new(name: 'John', email: 'lukasantosilva2@gmail.com', password: 'Password123!', type: 'SuperAdmin')
   user.skip_confirmation!
   user.save!
 
