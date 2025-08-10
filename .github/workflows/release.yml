@@ -1,0 +1,47 @@
+name: Deploy
+
+on:
+  push:
+    branches: [release]  # Alterado de 'release'  
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v2
+
+    - name: Deploy using SSH
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.HOST }}
+        username: ${{ secrets.USERNAME }}
+        password: ${{ secrets.PASSWORD }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}   
+        port: 22
+        script: |
+          whoami  #mostra o usuario
+          eval "$(ssh-agent -s)"
+          ssh-add -L
+          ssh-add ~/.ssh/id_rsa
+          ssh-add -L
+          ssh -T git@github.com 
+          cd /home/rdpuser/chatwoot
+
+          if [ -d "chatwoot" ]; then
+            echo "Repositório já existe, atualizando..."
+            cd chatwoot
+            git fetch origin
+            git checkout release
+            git pull origin release
+          else
+            git clone git@github.com:lucasfulldev/chatwoot.git
+            cd chatwoot
+          fi 
+
+          curl -H "Authorization: token ${{ secrets.MY_ENV_TOKEN }}" \
+          -L https://raw.githubusercontent.com/lucasfulldev/env-files/main/.env.chatwoot \
+          -o .env
+          
+          docker compose up -d --build
