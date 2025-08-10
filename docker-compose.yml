@@ -5,7 +5,7 @@ services:
     build: .
     command: ./entrypoints/web.sh
     ports:
-      - "3000:3000"
+      - "9021:3000"
     depends_on:
       db:
         condition: service_healthy # Garante que o DB esteja saudável
