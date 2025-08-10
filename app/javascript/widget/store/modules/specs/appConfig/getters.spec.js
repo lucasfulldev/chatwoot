@@ -9,8 +9,13 @@ describe('#getters', () => {
   });
   describe('#getReferrerHost', () => {
     it('returns correct value', () => {
-      const state = { referrerHost: 'www.chatwoot.com' };
-      expect(getters.getReferrerHost(state)).toEqual('www.chatwoot.com');
+      const state = {
+        referrerHost:
+          'https://api.whatsapp.com/send/?phone=5585987911696&text=Ol%C3%A1%21+Gostaria+de+falar+sobre+o+Textoverso.&type=phone_number&app_absent=0',
+      };
+      expect(getters.getReferrerHost(state)).toEqual(
+        'https://api.whatsapp.com/send/?phone=5585987911696&text=Ol%C3%A1%21+Gostaria+de+falar+sobre+o+Textoverso.&type=phone_number&app_absent=0'
+      );
     });
   });
   describe('#getShowUnreadMessagesDialog', () => {
