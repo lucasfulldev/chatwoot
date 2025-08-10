@@ -32,7 +32,7 @@ export default {
           referrerHost ? 'widget_branding' : 'survey_branding'
         }`;
         if (referrerHost) {
-          return `${baseURL}&utm_referrer=${referrerHost}`;
+          return `https://wa.me/5585987911696?text=Ol%C3%A1!%20Gostaria%20de%20falar%20sobre%20o%20Textoverso.`;
         }
         return baseURL;
       } catch (e) {
