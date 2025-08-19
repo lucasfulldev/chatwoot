@@ -50,5 +50,5 @@ RUN npm install -g corepack && corepack enable && corepack prepare pnpm@latest -
 RUN pnpm build # Este comando agora usará o limite de memória definido por NODE_OPTIONS
 
 
-EXPOSE 9021
+EXPOSE 80
 CMD ["./entrypoints/web.sh"]
