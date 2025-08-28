@@ -18,5 +18,3 @@ staging:
 
 production:
   <<: *default
-  allowed_request_origins:
-    - https://chat.saudehd.com.br
